@@ -93,17 +93,33 @@ export default function App() {
       const rawDate = selectedDate.replace(/-/g, "");
       
       try {
-        const response = await fetch(`/api/boxoffice?date=${rawDate}`);
-        if (!response.ok) {
-          const errData = await response.json().catch(() => ({}));
-          throw new Error(errData.details || errData.error || "박스오피스 데이터를 불러오는데 실패했습니다.");
+        let list: DailyBoxOffice[] = [];
+        let data: any = null;
+
+        try {
+          const response = await fetch(`/api/boxoffice?date=${rawDate}`);
+          // Vercel static fallback will return HTML if /api routes 404
+          const contentType = response.headers.get("content-type") || "";
+          if (!response.ok || contentType.includes("text/html")) {
+            throw new Error(`Proxy fallback: backend server did not handle JSON or returned status ${response.status}`);
+          }
+          data = await response.json();
+          list = data.boxOfficeResult?.dailyBoxOfficeList || [];
+        } catch (apiErr) {
+          console.warn("Express backend proxy is unavailable. Retrying with direct client-side KOBIS OpenAPI call...", apiErr);
+          // Fall back to direct KOBIS network fetch with default key
+          const fallbackUrl = `https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=99972d63afe55286f4c034eac28d0637&targetDt=${rawDate}`;
+          const fallbackRes = await fetch(fallbackUrl);
+          if (!fallbackRes.ok) {
+            throw new Error("영화진흥위원회 OpenAPI 직접 호출에 실패했습니다.");
+          }
+          data = await fallbackRes.json();
+          list = data.boxOfficeResult?.dailyBoxOfficeList || [];
         }
-        const data: BoxOfficeResponse = await response.json();
-        const list = data.boxOfficeResult?.dailyBoxOfficeList || [];
         
-        if (data.boxOfficeResult?.dailyBoxOfficeList === undefined && (data as any).faultInfo) {
+        if (data?.boxOfficeResult?.dailyBoxOfficeList === undefined && data?.faultInfo) {
           // Kobis fault representation
-          throw new Error((data as any).faultInfo?.message || "KOBIS API 호출 오류가 발생했습니다.");
+          throw new Error(data.faultInfo?.message || "KOBIS API 호출 오류가 발생했습니다.");
         }
         
         setMovies(list);

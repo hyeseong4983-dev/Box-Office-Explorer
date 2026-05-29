@@ -54,12 +54,28 @@ export function MovieDetail({ movieCd, onClose }: MovieDetailProps) {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(`/api/movie?code=${movieCd}`);
-        if (!response.ok) {
-          throw new Error("영화 정보를 불러오는데 실패했습니다.");
+        let info: MovieInfo | null = null;
+        let data: any = null;
+
+        try {
+          const response = await fetch(`/api/movie?code=${movieCd}`);
+          const contentType = response.headers.get("content-type") || "";
+          if (!response.ok || contentType.includes("text/html")) {
+            throw new Error(`Proxy fallback: backend server did not handle JSON or returned status ${response.status}`);
+          }
+          data = await response.json();
+          info = data.movieInfoResult?.movieInfo;
+        } catch (apiErr) {
+          console.warn("Express backend proxy is unavailable. Retrying with direct client-side KOBIS OpenAPI call...", apiErr);
+          const fallbackUrl = `https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json?key=99972d63afe55286f4c034eac28d0637&movieCd=${movieCd}`;
+          const fallbackRes = await fetch(fallbackUrl);
+          if (!fallbackRes.ok) {
+            throw new Error("영화진흥위원회 OpenAPI 직접 상세 호출에 실패했습니다.");
+          }
+          data = await fallbackRes.json();
+          info = data.movieInfoResult?.movieInfo;
         }
-        const data: MovieDetailResponse = await response.json();
-        const info = data.movieInfoResult?.movieInfo;
+
         if (info) {
           setMovie(info);
         } else {
