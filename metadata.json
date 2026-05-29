@@ -1,0 +1,6 @@
+{
+  "name": "Box Office Explorer",
+  "description": "A web application to search daily box office records and retrieve detailed movie information using the KOBIS OpenAPI.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
