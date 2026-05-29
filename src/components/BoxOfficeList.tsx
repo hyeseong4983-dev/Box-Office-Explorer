@@ -76,7 +76,7 @@ export function BoxOfficeList({
             className={`w-full text-left flex items-center p-4 rounded-xl transition-all duration-300 border ${
               isSelected
                 ? "bg-indigo-50/90 dark:bg-indigo-950/40 border-indigo-200 dark:border-indigo-800 ring-2 ring-indigo-500/20"
-                : "bg-white dark:bg-slate-900 hover:bg-slate-55 dark:hover:bg-slate-800/60 border-slate-100 dark:border-slate-800"
+                : "bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/60 border-slate-100 dark:border-slate-800"
             } shadow-sm cursor-pointer`}
           >
             {/* Rank Visual block */}
@@ -121,8 +121,8 @@ export function BoxOfficeList({
                     movie.rank === "1" 
                       ? "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-900"
                       : movie.rank === "2"
-                      ? "bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800/60 dark:text-slate-350 dark:border-slate-800"
-                      : "bg-amber-50/50 text-amber-800/80 border-amber-100 dark:bg-amber-950/20 dark:text-amber-450 dark:border-amber-950"
+                      ? "bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800/60 dark:text-slate-300 dark:border-slate-800"
+                      : "bg-amber-50/50 text-amber-800/80 border-amber-100 dark:bg-amber-950/20 dark:text-amber-400 dark:border-amber-950"
                   }`}>
                     TOP {movie.rank}
                   </span>

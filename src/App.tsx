@@ -68,6 +68,15 @@ export default function App() {
     }
   }, []);
 
+  // Synchronize document theme class
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [isDarkMode]);
+
   // Theme Toggle Handler
   const toggleTheme = () => {
     const newTheme = !isDarkMode;

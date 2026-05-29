@@ -117,23 +117,23 @@ export function MovieDetail({ movieCd, onClose }: MovieDetailProps) {
   // Genre coloring mapper
   const genresList = movie.genres.map((g) => g.genreNm);
   const theme = {
-    bg: "from-indigo-600 to-slate-900 dark:from-indigo-950/50 dark:to-slate-950/90",
-    accent: "text-indigo-550 border-indigo-500/20",
-    badge: "bg-indigo-50/60 dark:bg-indigo-950/30 text-indigo-750 dark:text-indigo-400 border-indigo-100/50 dark:border-indigo-900/40"
+    bg: "from-indigo-500 to-indigo-700 dark:from-indigo-950 dark:to-slate-950",
+    accent: "text-indigo-500 dark:text-indigo-400",
+    badge: "bg-indigo-50 dark:bg-indigo-950/45 text-indigo-700 dark:text-indigo-400 border-indigo-100 dark:border-indigo-900/40"
   };
   const mainGenre = genresList[0] || "";
   if (mainGenre.includes("액션") || mainGenre.includes("스릴러") || mainGenre.includes("범죄") || mainGenre.includes("공포")) {
-    theme.bg = "from-rose-600 to-slate-900 dark:from-rose-950/40 dark:to-slate-950/90";
-    theme.accent = "text-rose-505 border-rose-500/20";
-    theme.badge = "bg-rose-50/65 dark:bg-rose-950/30 text-rose-750 dark:text-rose-400 border-rose-100/50 dark:border-rose-900/40";
+    theme.bg = "from-rose-500 to-rose-700 dark:from-rose-950 dark:to-slate-950";
+    theme.accent = "text-rose-500 dark:text-rose-400";
+    theme.badge = "bg-rose-50 dark:bg-rose-950/45 text-rose-700 dark:text-rose-400 border-rose-100 dark:border-rose-900/40";
   } else if (mainGenre.includes("코미디") || mainGenre.includes("가족") || mainGenre.includes("애니메이션") || mainGenre.includes("모험") || mainGenre.includes("SF")) {
-    theme.bg = "from-amber-500 to-slate-900 dark:from-amber-950/35 dark:to-slate-950/90";
-    theme.accent = "text-amber-505 border-amber-500/20";
-    theme.badge = "bg-amber-50/65 dark:bg-amber-950/30 text-amber-750 dark:text-amber-400 border-amber-100/50 dark:border-amber-900/40";
+    theme.bg = "from-amber-500 to-amber-600 dark:from-amber-950 dark:to-slate-950";
+    theme.accent = "text-amber-500 dark:text-amber-400";
+    theme.badge = "bg-amber-50 dark:bg-amber-950/45 text-amber-700 dark:text-amber-400 border-amber-100 dark:border-amber-900/40";
   } else if (mainGenre.includes("멜로") || mainGenre.includes("로맨스") || mainGenre.includes("드라마")) {
-    theme.bg = "from-emerald-600 to-slate-900 dark:from-emerald-950/30 dark:to-slate-950/90";
-    theme.accent = "text-emerald-505 border-emerald-500/20";
-    theme.badge = "bg-emerald-50/65 dark:bg-emerald-950/30 text-emerald-750 dark:text-emerald-400 border-emerald-100/50 dark:border-emerald-900/40";
+    theme.bg = "from-emerald-500 to-emerald-700 dark:from-emerald-950 dark:to-slate-950";
+    theme.accent = "text-emerald-500 dark:text-emerald-400";
+    theme.badge = "bg-emerald-50 dark:bg-emerald-950/45 text-emerald-700 dark:text-emerald-400 border-emerald-100 dark:border-emerald-900/40";
   }
 
   // Format Helper for date (YYYYMMDD to YYYY-MM-DD)
@@ -246,7 +246,7 @@ export function MovieDetail({ movieCd, onClose }: MovieDetailProps) {
           {/* Section 2: Director block */}
           <div className="space-y-2">
             <h3 className="font-sans font-medium text-slate-800 dark:text-slate-200 text-sm flex items-center">
-              <User className="w-4 h-4 mr-2 text-indigo-550" />
+              <User className={`w-4 h-4 mr-2 ${theme.accent}`} />
               감독
             </h3>
             <div className="flex flex-wrap gap-2">
@@ -271,7 +271,7 @@ export function MovieDetail({ movieCd, onClose }: MovieDetailProps) {
           {/* Section 3: Cast Actors block */}
           <div className="space-y-2">
             <h3 className="font-sans font-medium text-slate-800 dark:text-slate-200 text-sm flex items-center">
-              <Users className="w-4 h-4 mr-2 text-indigo-550" />
+              <Users className={`w-4 h-4 mr-2 ${theme.accent}`} />
               출연 배우
             </h3>
             {movie.actors.length > 0 ? (
@@ -304,7 +304,7 @@ export function MovieDetail({ movieCd, onClose }: MovieDetailProps) {
           {movie.companys.length > 0 && (
             <div className="space-y-2">
               <h3 className="font-sans font-medium text-slate-800 dark:text-slate-200 text-sm flex items-center">
-                <Building className="w-4 h-4 mr-2 text-indigo-550" />
+                <Building className={`w-4 h-4 mr-2 ${theme.accent}`} />
                 영화사 참여 정보
               </h3>
               <div className="space-y-1.5">
@@ -313,7 +313,7 @@ export function MovieDetail({ movieCd, onClose }: MovieDetailProps) {
                     key={idx}
                     className="flex justify-between items-center text-xs p-2 bg-slate-50/30 dark:bg-slate-900/40 border border-slate-100/50 dark:border-slate-800/50 rounded-lg"
                   >
-                    <span className="font-medium text-slate-750 dark:text-slate-200">{comp.companyNm}</span>
+                    <span className="font-medium text-slate-700 dark:text-slate-200">{comp.companyNm}</span>
                     <span className="text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-500 rounded px-1.5 py-0.5">
                       {comp.companyPartNm}
                     </span>
@@ -327,7 +327,7 @@ export function MovieDetail({ movieCd, onClose }: MovieDetailProps) {
           {movie.staffs.length > 0 && (
             <div className="space-y-2">
               <h3 className="font-sans font-medium text-slate-800 dark:text-slate-200 text-sm flex items-center">
-                <Clapperboard className="w-4 h-4 mr-2 text-indigo-550" />
+                <Clapperboard className={`w-4 h-4 mr-2 ${theme.accent}`} />
                 제작 스태프
               </h3>
               <div className="h-auto max-h-[100px] overflow-y-auto text-xs space-y-1.5 pr-1">
