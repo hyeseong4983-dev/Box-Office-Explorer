@@ -95,10 +95,17 @@ export default function App() {
       try {
         const response = await fetch(`/api/boxoffice?date=${rawDate}`);
         if (!response.ok) {
-          throw new Error("박스오피스 데이터를 불러오는데 실패했습니다.");
+          const errData = await response.json().catch(() => ({}));
+          throw new Error(errData.details || errData.error || "박스오피스 데이터를 불러오는데 실패했습니다.");
         }
         const data: BoxOfficeResponse = await response.json();
         const list = data.boxOfficeResult?.dailyBoxOfficeList || [];
+        
+        if (data.boxOfficeResult?.dailyBoxOfficeList === undefined && (data as any).faultInfo) {
+          // Kobis fault representation
+          throw new Error((data as any).faultInfo?.message || "KOBIS API 호출 오류가 발생했습니다.");
+        }
+        
         setMovies(list);
         setFilteredMovies(list);
         setSearchTerm(""); // reset search on date change
@@ -111,7 +118,7 @@ export default function App() {
         }
       } catch (err: any) {
         console.error(err);
-        setError("영화진흥위원회 OpenAPI 서버로부터 일별 박스오피스 순위를 받아오지 못했습니다. 잠시 후 다시 시도해 주세요.");
+        setError(`영화진흥위원회 OpenAPI 로드 실패: ${err.message}`);
         setMovies([]);
         setFilteredMovies([]);
         setSelectedMovieCd(null);
@@ -288,6 +295,7 @@ export default function App() {
               selectedMovieCd={selectedMovieCd}
               onSelectMovie={handleSelectMovie}
               loading={loading}
+              onSetRecommendedDate={setSelectedDate}
             />
           </div>
 

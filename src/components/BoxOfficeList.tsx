@@ -7,6 +7,7 @@ interface BoxOfficeListProps {
   selectedMovieCd: string | null;
   onSelectMovie: (movieCd: string) => void;
   loading: boolean;
+  onSetRecommendedDate?: (dateStr: string) => void;
 }
 
 export function BoxOfficeList({
@@ -14,6 +15,7 @@ export function BoxOfficeList({
   selectedMovieCd,
   onSelectMovie,
   loading,
+  onSetRecommendedDate,
 }: BoxOfficeListProps) {
   if (loading) {
     return (
@@ -37,16 +39,39 @@ export function BoxOfficeList({
   if (movies.length === 0) {
     return (
       <div
-        className="flex flex-col items-center justify-center p-12 text-center border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm"
+        className="flex flex-col items-center justify-center p-8 text-center border-2 border-dashed border-slate-200 dark:border-slate-800/80 rounded-2xl bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm"
         id="box-office-list-empty"
       >
-        <Award className="w-12 h-12 text-slate-400 mb-3" />
-        <h3 className="font-sans font-medium text-slate-900 dark:text-slate-100 text-lg mb-1">
-          박스오피스 정보가 없습니다
+        <Award className="w-10 h-10 text-amber-500 mb-3 animate-bounce" />
+        <h3 className="font-sans font-semibold text-slate-900 dark:text-slate-100 text-base mb-1">
+          조회 결과가 비어 있습니다
         </h3>
-        <p className="text-sm text-slate-500 max-w-xs">
-          선택하신 날짜의 박스오피스 정보를 불러올 수 없거나 데이터가 아직 업데이트되지 않았을 수 있습니다.
+        <p className="text-xs text-slate-500 max-w-xs mb-5 leading-relaxed">
+          영화진흥위원회(KOBIS) 데이터는 실제 과거 날짜에만 존재합니다. 테스트 시 시스템 날짜(2026년 등)가 미래 시점인 경우 영화 기록을 받아올 수 없습니다.
         </p>
+        
+        {onSetRecommendedDate && (
+          <div className="w-full space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800/80">
+            <span className="text-[10px] font-semibold text-slate-400 dark:text-slate-505 block uppercase tracking-wider">
+              실제 영화 기록이 있는 추천 날짜 선택
+            </span>
+            <div className="grid grid-cols-1 gap-1.5 pt-1">
+              {[
+                { label: "2025년 2월 25일 (최근 기록)", date: "2025-02-25" },
+                { label: "2024년 12월 25일 (크리스마스)", date: "2024-12-25" },
+                { label: "2024년 5월 28일 (과거 봄 시즌)", date: "2024-05-28" }
+              ].map((item) => (
+                <button
+                  key={item.date}
+                  onClick={() => onSetRecommendedDate(item.date)}
+                  className="w-full py-2 px-3 text-xs font-semibold rounded-lg bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/40 dark:hover:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 border border-indigo-100/60 dark:border-indigo-900/40 cursor-pointer transition-all active:scale-[0.98]"
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     );
   }
